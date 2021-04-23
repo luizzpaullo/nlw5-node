@@ -12,3 +12,7 @@
 - Criar Controllers
 
 
+## Create table Messages
+
+> yarn typeorm migrate:create -n CreateMessages
+> yarn typeorm migrate:run

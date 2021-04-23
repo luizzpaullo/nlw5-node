@@ -1,14 +1,19 @@
-import { getCustomRepository } from "typeorm"
+import { getCustomRepository, Repository } from "typeorm"
+import { User } from "../entities/User";
 import { UsersRepository } from "../repositories/UsersRepository"
 
 //nao criou a interface pq eh 1 regitsro
 
 class UsersService {
-    async create(email: string) {
-        const userRepository = getCustomRepository(UsersRepository)
+    private usersRepository: Repository<User>
 
+    constructor(){
+        this.usersRepository =  getCustomRepository(UsersRepository);
+    }
+
+    async create(email: string) {
         // 1 Verificar se o usuário existe 
-        const userExists = await userRepository.findOne({ email });
+        const userExists = await this.usersRepository.findOne({ email });
 
 
         // 2 Se nao existir, salvar no DB
@@ -16,9 +21,9 @@ class UsersService {
             return userExists;
         }
 
-        const user = userRepository.create({ email});
+        const user = this.usersRepository.create({ email});
 
-        await userRepository.save(user);
+        await this.usersRepository.save(user);
 
 
         // 3 Se existir, retornar USER
